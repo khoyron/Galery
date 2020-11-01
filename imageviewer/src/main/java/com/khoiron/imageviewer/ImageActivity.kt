@@ -1,16 +1,19 @@
 package com.khoiron.imageviewer
 
-import android.os.Bundle
-import android.view.View
-import android.view.MotionEvent
-import android.graphics.BitmapFactory
 import android.annotation.SuppressLint
+import android.content.res.Configuration
+import android.os.Bundle
+import android.view.MotionEvent
+import android.view.View
 import android.view.View.OnTouchListener
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_image.*
+import java.text.SimpleDateFormat
 
 
-class ImageActivity : AppCompatActivity() {
+class ImageActivity : AppCompatActivity(),OnclickListenerRecyclerView {
 
     private var xCoOrdinate = 0f
     private var yCoOrdinate = 0f
@@ -18,16 +21,34 @@ class ImageActivity : AppCompatActivity() {
     private var screenCenterY = 0.0
     private var alpha = 0
     lateinit var view: View
+    var data = ArrayList<ImageModel>()
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
 
-        val extras = intent.extras?.getByteArray("picture")
-        val bmp = BitmapFactory.decodeByteArray(extras, 0, extras!!.size)
-        imageView.setImageBitmap(bmp)
+        val parms: LinearLayout.LayoutParams = LinearLayout.LayoutParams(getWidth(), getWidth())
+        imageView.setLayoutParams(parms)
 
+        initAnimationLayout()
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        val adapter by lazy { ImageAdapter(this, data) }
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        rv_image.setLayoutManager(layoutManager)
+        rv_image.setNestedScrollingEnabled(false)
+        rv_image.setHasFixedSize(true)
+        rv_image.setAdapter(adapter)
+
+        adapter.setOnclickListener(this)
+        ic_back.setOnClickListener { finish() }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun initAnimationLayout() {
         view = findViewById(R.id.layout)
         view.getBackground().alpha = 255
 
@@ -85,6 +106,21 @@ class ImageActivity : AppCompatActivity() {
             result = resources.getDimensionPixelSize(resourceId)
         }
         return result
+    }
+
+    override fun onclick(view: Int, position: Int) {
+        tv_title_image.text = data[position].titleImage
+        tv_total_and_date.text = "${position} of 10"
+        if (data[position].date!=null){
+            tv_total_and_date.text  = "${position} of 10, ${SimpleDateFormat("MMM yy").format(data[position].date)} at ${SimpleDateFormat(
+                "HH:mm"
+            ).format(data[position].date)}"
+        }
+    }
+
+    fun getWidth(): Int {
+        val configuration: Configuration = getResources().getConfiguration()
+        return configuration.screenWidthDp //The current width of the available screen space, in dp units, corresponding to screen width resource qualifier.
     }
 
 }

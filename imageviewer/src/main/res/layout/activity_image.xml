@@ -4,9 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
     android:id="@+id/layout"
     tools:context=".ImageActivity">
+
+    <LinearLayout
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="#A1090909"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ic_back"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_back"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"></ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_title_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="Khoiron"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"></TextView>
+            <TextView
+                android:id="@+id/tv_total_and_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="1 of 10, Jan 17 at 14:09"
+                android:textColor="@android:color/white"></TextView>
+        </LinearLayout>
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView"
@@ -14,5 +52,13 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:transitionName="image"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_image"
+        android:background="#A1090909"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="66dp">
+    </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>
