@@ -48,4 +48,9 @@ class ImageAdapter (var context: Context, var items: ArrayList<ImageModel>): Rec
     class ViewHolder(row: View) : RecyclerView.ViewHolder(row) {
 
     }
+
+    fun setData(data:ArrayList<ImageModel>){
+        items = data
+        notifyDataSetChanged()
+    }
 }

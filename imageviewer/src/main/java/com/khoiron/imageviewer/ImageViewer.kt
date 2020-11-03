@@ -9,9 +9,13 @@ import androidx.core.app.ActivityOptionsCompat
 
 class ImageViewer {
 
-    fun show(context: Context, view: View, drawable: Int){
+    val DATA_IMAGE = "image"
+    val DATA_CODE = "data"
+
+    fun show(context: Context, view: View, data:ArrayList<ImageModel>){
 
         val intent = Intent(context, ImageActivity::class.java)
+        intent.putExtra(DATA_CODE,data)
         val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
             (context as Activity), view, "thumbnailTransition"
         )

@@ -1,16 +1,17 @@
 package com.khoiron.imageviewer
 
+import android.os.Bundle
+import android.view.View
+import android.view.MotionEvent
+import java.text.SimpleDateFormat
+import android.widget.LinearLayout
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.MotionEvent
-import android.view.View
 import android.view.View.OnTouchListener
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_image.*
-import java.text.SimpleDateFormat
 
 
 class ImageActivity : AppCompatActivity(),OnclickListenerRecyclerView {
@@ -22,6 +23,8 @@ class ImageActivity : AppCompatActivity(),OnclickListenerRecyclerView {
     private var alpha = 0
     lateinit var view: View
     var data = ArrayList<ImageModel>()
+    var dataImage = ImageModel()
+    val adapter by lazy { ImageAdapter(this, data) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +35,32 @@ class ImageActivity : AppCompatActivity(),OnclickListenerRecyclerView {
 
         initAnimationLayout()
         initRecyclerView()
+        setDataFromIntent()
+    }
+
+    private fun setDataFromIntent() {
+        try {
+            data = intent.extras?.getParcelableArrayList(ImageViewer().DATA_CODE)!!
+            adapter.setData(data)
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
+        try {
+            dataImage = intent.getParcelableExtra(ImageViewer().DATA_IMAGE)
+            if (dataImage.imageBitmaps!=null){
+                imageView.setImageBitmap(dataImage.imageBitmaps)
+            }
+            else {
+                Picasso.get().load(dataImage.imageUrl).fit().into(imageView)
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
     }
 
     private fun initRecyclerView() {
-        val adapter by lazy { ImageAdapter(this, data) }
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         rv_image.setLayoutManager(layoutManager)
